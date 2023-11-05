@@ -44,7 +44,7 @@
 -   Including all criteria seen in diagram
 -   Take data from preexisting MTG cards to generate info
 -   Receive user feedback
-#
+
     **![](https://lh7-us.googleusercontent.com/sIyFAbFDnPci6tLaialQfuwvHt_ftPcZj1fP6h7zMVCDzoVyXHgYiTXWp5N5NlilqOBvIWDYikzMLfpc4Mo9URPtT_gk9RlekxLhhvakT4YoWpqkzY-N6864_ce-5yM7wB59_BaPsSKZptlMtbhFwzguTw=s2048)**
 #
 -   Through which card they choose
