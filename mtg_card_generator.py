@@ -1,7 +1,7 @@
 import openai
 
 # Set API key
-openai.api_key = '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'
+openai.api_key = 'api_key'
 
 def generate_magic_card_name(card_type, color_identity, mana_value, specialization):
     # Define a prompt
@@ -60,6 +60,7 @@ def generate_card_art(card_name):
     print(f"Card Art for '{card_name}': {image_url}")
 
 
+# Exaple usage
 name = generate_magic_card_name("Creature", "Red", "3", "Aggressive")
 generate_magic_card(name, "Creature", "Red", "3", "Aggressive")
 generate_card_art(name)
