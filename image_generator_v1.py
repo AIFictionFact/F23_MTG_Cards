@@ -11,7 +11,7 @@ def generate_card_with_art_and_text(image_url, card_name, card_text, output_path
     draw = ImageDraw.Draw(image)
 
     # Set font parameters
-    font_path = "c:\\Users\\exrod\Pictures\\school\\rpi\\ai\\project\\magicthegathering\\MAGIC.TTF"  # Replace with the path to a TTF font file
+    font_path = "fontpath.TTF"  # Replace with the path to a TTF font file
     font_size = 60
     font = ImageFont.truetype(font_path, font_size)
 
