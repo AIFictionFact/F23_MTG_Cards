@@ -3,7 +3,7 @@ import csv
 from mtg_card_generator import generate_magic_card_name, generate_magic_card
 import numpy
 import random
-
+import textwrap
 # rating is the rating given to the card
 # card_info is the list of features applied to the card
 # hist is a list of cards drafted prior to this draft
@@ -52,7 +52,7 @@ def rating_window(card_image,card_info,filename,draft_num,hist):
     
     #layout = [[sg.Image(card_image),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
 
-    layout = [[sg.Text(card_image),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
+    layout = [[sg.Text(card_image,,size=(25, None)),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
 
     
     # layout = [[sg.Column(layout_column, element_justification='center')]]
@@ -71,8 +71,8 @@ def draft_window(images,card_details,draft_num,hist):
     # images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
     # images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
     
-    images1 = [sg.Text(images[0]),sg.Text(images[1]),sg.Text(images[2]),sg.Text(images[3]),sg.Text(images[4])]
-    images2 = [sg.Text(images[5]),sg.Text(images[6]),sg.Text(images[7]),sg.Text(images[8]),sg.Text(images[9])]
+    images1 = [sg.Text(images[0],size=(25, None)),sg.Text(images[1],size=(25, None)),sg.Text(images[2],size=(25, None)),sg.Text(images[3],size=(25, None)),sg.Text(images[4],size=(25, None))]
+    images2 = [sg.Text(images[5],size=(25, None)),sg.Text(images[6],size=(25, None)),sg.Text(images[7],size=(25, None)),sg.Text(images[8],size=(25, None)),sg.Text(images[9],size=(25, None))]
     buttons1 = [sg.Button("Draft First Card?",size=(23,1)),sg.Button("Draft Second Card?",size=(23,1)),sg.Button("Draft Third Card?",size=(23,1)),sg.Button("Draft Fourth Card?",size=(23,1)),sg.Button("Draft Fifth Card?",size=(23,1))]
     buttons2 = [sg.Button("Draft Sixith Card?",size=(23,1)),sg.Button("Draft Seventh Card?",size=(23,1)),sg.Button("Draft Eighth Card?",size=(23,1)),sg.Button("Draft Ninth Card?",size=(23,1)),sg.Button("Draft Tenth Card?",size=(23,1))]
     layout = [images1, buttons1,images2,buttons2]
@@ -137,7 +137,7 @@ def field_card_window():
     image = 'card.png'
     filename = "field_card.csv"
     #layout = [ [sg.Image(image)], [sg.Button("Next Card")],[sg.Button("Finish")]]
-    layout = [ [sg.Text(image)], [sg.Button("Next Card")],[sg.Button("Finish")]]
+    layout = [ [sg.Text(image,size=(25, None))], [sg.Button("Next Card")],[sg.Button("Finish")]]
     window = sg.Window("MTG drafter", layout)
 
     while True:
@@ -178,13 +178,13 @@ def main_window():
                     # get info from model
                     card_details = generate_random_card_features()
                     # get cards using the info from the model
-                    name = generate_magic_card_name(card_details)
-                    card_text = generate_magic_card(name, card_details)
+                    # name = generate_magic_card_name(card_details)
+                    # card_text = generate_magic_card(name, card_details)
 
                     # card_text EXAMPLE: ["\n3 Red\n2 Colorless", "\n Creature", "\nMana Wurm\nWhenever you cast a spell, put a +1/+1 counter on Mana Wurm."]
                     # turn card_text into text!!!! <-------------------------------
 
-                    card_detail_list.append(card_details)
+                    # card_detail_list.append(card_details)
                     images.append(card_text)
 
                 hist = draft_window(images,card_details,i,hist)
