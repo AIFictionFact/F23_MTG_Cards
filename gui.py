@@ -50,7 +50,9 @@ def store_rating(rating,card_info,filename,draft_num,hist):
 
 def rating_window(card_image,card_info,filename,draft_num,hist):
     
-    layout = [[sg.Image(card_image),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
+    #layout = [[sg.Image(card_image),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
+
+    layout = [[sg.Text(card_image),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
 
     
     # layout = [[sg.Column(layout_column, element_justification='center')]]
@@ -66,8 +68,11 @@ def rating_window(card_image,card_info,filename,draft_num,hist):
     return hist
 
 def draft_window(images,card_details,draft_num,hist):
-    images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
-    images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
+    # images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
+    # images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
+    
+    images1 = [sg.Text(images[0]),sg.Text(images[1]),sg.Text(images[2]),sg.Text(images[3]),sg.Text(images[4])]
+    images2 = [sg.Text(images[5]),sg.Text(images[6]),sg.Text(images[7]),sg.Text(images[8]),sg.Text(images[9])]
     buttons1 = [sg.Button("Draft First Card?",size=(23,1)),sg.Button("Draft Second Card?",size=(23,1)),sg.Button("Draft Third Card?",size=(23,1)),sg.Button("Draft Fourth Card?",size=(23,1)),sg.Button("Draft Fifth Card?",size=(23,1))]
     buttons2 = [sg.Button("Draft Sixith Card?",size=(23,1)),sg.Button("Draft Seventh Card?",size=(23,1)),sg.Button("Draft Eighth Card?",size=(23,1)),sg.Button("Draft Ninth Card?",size=(23,1)),sg.Button("Draft Tenth Card?",size=(23,1))]
     layout = [images1, buttons1,images2,buttons2]
@@ -131,8 +136,8 @@ def field_card_window():
 
     image = 'card.png'
     filename = "field_card.csv"
-    layout = [ [sg.Image(image)], [sg.Button("Next Card")],[sg.Button("Finish")]]
-
+    #layout = [ [sg.Image(image)], [sg.Button("Next Card")],[sg.Button("Finish")]]
+    layout = [ [sg.Text(image)], [sg.Button("Next Card")],[sg.Button("Finish")]]
     window = sg.Window("MTG drafter", layout)
 
     while True:
