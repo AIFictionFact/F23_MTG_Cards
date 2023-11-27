@@ -1,7 +1,7 @@
 import openai
 
 # Set API key
-openai.api_key = 'insert_key_here'
+openai.api_key = 'instert_key_here'
 
 def generate_magic_card_name(card_features):
     # Define a prompt
@@ -54,7 +54,6 @@ def generate_magic_card_name(card_features):
     elif card_features[11] <= 1:
         prompt += f"\n Special card which is extremely powerful if paired with other abilities"
 
-    openai.api_key = "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"
     # Generate card text using the GPT-3 model
     response = openai.Completion.create(
         engine="text-davinci-002",
@@ -96,12 +95,16 @@ def generate_magic_card(card_name, card_features):
     if card_features[5] > 0:     # if there is colorless mana
         mana_info += f"\n{card_features[5]} Colorless"
 
-    prompt += mana_info
-    card_details.append(mana_info)
-    
     # check if no mana cost
     if card_features[0] + card_features[1] + card_features[2] + card_features[3] + card_features[4] + card_features[5] == 0:
-        prompt += f"\n(no mana cost)"
+        mana_info += f"\n(no mana cost)"
+
+
+    prompt += mana_info
+    mana_info += "\n"
+    card_details.append(mana_info.replace('\n', '|'))
+    
+    card_details.append("=========================")
 
     prompt += f"\n\nCard Types: "
     # 6 to 10 are card types creature, instant, sorcery, artifact, enchantment
@@ -119,7 +122,9 @@ def generate_magic_card(card_name, card_features):
         type_info += f"\n Enchantment"
 
     prompt += type_info
-    card_details.append(type_info)
+    card_details.append(type_info.replace('\n', ''))
+    
+    card_details.append("=========================")
 
     prompt += f"\n\nPurpose: "
     # 11 is a special feature to indicate the level of specialization the card should have
@@ -149,11 +154,13 @@ def generate_magic_card(card_name, card_features):
 
     # Extract card text
     card_text = response.choices[0].text.strip()
-    card_details.append(card_text)
+    card_details.append(card_text.replace('\n', ''))
+
+    
 
     # Print
     # print(card_details)
-    return(card_details)
+    return(" ".join(card_details))
 
 
 def generate_card_art(card_name):

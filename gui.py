@@ -11,7 +11,7 @@ import textwrap
 def store_rating(rating,card_info,filename,draft_num,hist):
 
     # number of zero values to pad the data
-    zeroes = 10 - draft_num
+    zeroes = 9 - draft_num
 
     rnn_sample = []
 
@@ -52,7 +52,7 @@ def rating_window(card_image,card_info,filename,draft_num,hist):
     
     #layout = [[sg.Image(card_image),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
 
-    layout = [[sg.Text(card_image,,size=(25, None)),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
+    layout = [[sg.Text(card_image,size=(25, None)),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
 
     
     # layout = [[sg.Column(layout_column, element_justification='center')]]
@@ -178,13 +178,13 @@ def main_window():
                     # get info from model
                     card_details = generate_random_card_features()
                     # get cards using the info from the model
-                    # name = generate_magic_card_name(card_details)
-                    # card_text = generate_magic_card(name, card_details)
+                    name = generate_magic_card_name(card_details)
+                    card_text = generate_magic_card(name, card_details)
 
                     # card_text EXAMPLE: ["\n3 Red\n2 Colorless", "\n Creature", "\nMana Wurm\nWhenever you cast a spell, put a +1/+1 counter on Mana Wurm."]
                     # turn card_text into text!!!! <-------------------------------
 
-                    # card_detail_list.append(card_details)
+                    card_detail_list.append(card_details)
                     images.append(card_text)
 
                 hist = draft_window(images,card_details,i,hist)
