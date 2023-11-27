@@ -52,7 +52,7 @@ def generate_magic_card_name(card_features):
     elif card_features[11] < 0.8:
         prompt += f"\n Impactful card you have to build a deck around to be good"    
     elif card_features[11] <= 1:
-        prompt += f"\n Special card which can win the game if paired with other cards special abilities"
+        prompt += f"\n Special card which is extremely powerful if paired with other abilities"
 
     # Generate card text using the GPT-3 model
     response = openai.Completion.create(
