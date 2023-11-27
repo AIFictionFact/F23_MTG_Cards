@@ -36,7 +36,7 @@ def generate_card_png(image_url, card_name, card_type, card_text, make_pic, outp
 
 
     # Set font parameters
-    font_path = "c:\\Users\\exrod\Pictures\\school\\rpi\\ai\\project\\magicthegathering\\MAGIC.TTF"  # Replace with the path to a TTF font file
+    font_path = "path//MAGIC.TFF"  # Replace with the path to a TTF font file
     font_size = 60
     font = ImageFont.truetype(font_path, font_size)
 
