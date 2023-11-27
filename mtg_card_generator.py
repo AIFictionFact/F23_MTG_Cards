@@ -74,7 +74,7 @@ def generate_magic_card_name(card_features):
 def generate_magic_card(card_name, card_features):
     # Define a prompt
 
-    prompt = f"Create the abilities of a new Magic: The Gathering card {card_name} that has the following attributes:\n\nMana costs: "
+    prompt = f'Create the abilities of a new Magic: The Gathering card, "{card_name}" that has the following attributes:\n\nMana costs: '
 
     # card features is a list of 12 details for writing the card
     # 0 to 5 are mana colors and amounts. Red,blue,green,white,black,colorless
