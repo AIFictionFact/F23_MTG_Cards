@@ -110,7 +110,7 @@ def field_card_window():
 def main_window():
 
     layout = [[sg.Text("Want to get drafting?")], [sg.Button("Start draft")],
-              [sg.Text("Want to add a card to the feild?")], [sg.Button("Add card")],
+              [sg.Text("Want to add a card to the field?")], [sg.Button("Add card")],
                [sg.Text("Want to leave?")], [sg.Button("Exit")]
               ]
 
