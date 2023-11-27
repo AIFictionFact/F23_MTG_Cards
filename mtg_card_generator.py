@@ -5,7 +5,7 @@ openai.api_key = 'api_key'
 
 def generate_magic_card_name(card_features):
     # Define a prompt
-    prompt = f"Create only the name of a new Magic: The Gathering card that has the following attributes:"
+    prompt = f"Create only the name of a new Magic: The Gathering card that has the following attributes:\n\nMana costs: "
 
     # card features is a list of 12 details for writing the card
     # 0 to 5 are mana colors and amounts. Red,blue,green,white,black,colorless
