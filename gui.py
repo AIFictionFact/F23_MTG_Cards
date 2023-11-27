@@ -181,7 +181,8 @@ def main_window():
                     name = generate_magic_card_name(card_details)
                     card_text = generate_magic_card(name, card_details)
 
-                    # turn card_text into png!!!! <-------------------------------
+                    # card_text EXAMPLE: ["\n3 Red\n2 Colorless", "\n Creature", "\nMana Wurm\nWhenever you cast a spell, put a +1/+1 counter on Mana Wurm."]
+                    # turn card_text into text!!!! <-------------------------------
 
                     card_detail_list.append(card_details)
                     images.append(card_text)
@@ -202,21 +203,21 @@ def generate_random_card_features():
 
     features = []
     # card colors 0 thru 5
-    features.append(numpy.random.choice(numpy.arange(0, 5), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # red
-    features.append(numpy.random.choice(numpy.arange(0, 5), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # blue
-    features.append(numpy.random.choice(numpy.arange(0, 5), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # green
-    features.append(numpy.random.choice(numpy.arange(0, 5), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # white
-    features.append(numpy.random.choice(numpy.arange(0, 5), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # black
-    features.append(numpy.random.choice(numpy.arange(0, 5), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # colorless
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # red
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # blue
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # green
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # white
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # black
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # colorless
 
     # card type
-    features.append(numpy.random.choice(numpy.arange(0, 1), p=[0.95, 0.05])) # 5 percent chance its multitype
-    features.append(numpy.random.choice(numpy.arange(0, 1), p=[0.95, 0.05]))
-    features.append(numpy.random.choice(numpy.arange(0, 1), p=[0.95, 0.05]))
-    features.append(numpy.random.choice(numpy.arange(0, 1), p=[0.95, 0.05])) 
-    features.append(numpy.random.choice(numpy.arange(0, 1), p=[0.95, 0.05])) 
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05])) # 5 percent chance its multitype
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05]))
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05]))
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05])) 
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05])) 
     
-    type = numpy.random.choice(numpy.arange(0, 4), p=[0.2, 0.2, 0.2, 0.2, 0.2]) # which primary type?
+    type = numpy.random.choice(numpy.arange(0, 5), p=[0.2, 0.2, 0.2, 0.2, 0.2]) # which primary type?
     if type == 0:
         features[6] = 1 # creature
     elif type == 1:
