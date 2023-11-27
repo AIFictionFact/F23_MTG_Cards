@@ -3,9 +3,56 @@ import openai
 # Set API key
 openai.api_key = 'api_key'
 
-def generate_magic_card_name(card_type, color_identity, mana_value, specialization):
+def generate_magic_card_name(card_features):
     # Define a prompt
-    prompt = f"Create only the name of a new Magic: The Gathering card that has the following attributes:\n\nType: {card_type}\nColor Identity: {color_identity}\nMana Value: {mana_value}"
+    prompt = f"Create only the name of a new Magic: The Gathering card that has the following attributes:"
+
+    # card features is a list of 12 details for writing the card
+    # 0 to 5 are mana colors and amounts. Red,blue,green,white,black,colorless
+    if card_features[0] > 0:     # if there is red mana
+        prompt += f"\n{card_features[0]} Red"
+    if card_features[1] > 0:     # if there is blue mana
+        prompt += f"\n{card_features[1]} Blue"
+    if card_features[2] > 0:     # if there is green mana
+        prompt += f"\n{card_features[2]} Green"
+    if card_features[3] > 0:     # if there is white mana
+        prompt += f"\n{card_features[3]} White"
+    if card_features[4] > 0:     # if there is black mana
+        prompt += f"\n{card_features[4]} Black"
+    if card_features[5] > 0:     # if there is colorless mana
+        prompt += f"\n{card_features[5]} Colorless"
+
+    # check if no mana cost
+    if card_features[0] + card_features[1] + card_features[2] + card_features[3] + card_features[4] + card_features[5] == 0:
+        prompt += f"\n(no mana cost)"
+
+    prompt += f"\n\nCard Types: "
+    # 6 to 10 are card types creature, instant, sorcery, artifact, enchantment
+    if card_features[6] == 1:
+        prompt += f"\n Creature"
+    if card_features[7] == 1:
+        prompt += f"\n Instant"    
+    if card_features[8] == 1:
+        prompt += f"\n Sorcery"    
+    if card_features[9] == 1:
+        prompt += f"\n Artifact"    
+    if card_features[10] == 1:
+        prompt += f"\n Enchantment"
+
+    prompt += f"\n\nPurpose: "
+    # 11 is a special feature to indicate the level of specialization the card should have
+    # 0-0.4 you get a general card 
+    # 0.4-0.6 you get a card good for the color
+    # 0.6-0.8 you get a commander type card
+    # 0.8-1 you get a infinite combo card (hopefully)
+    if card_features[11] < 0.4:
+        prompt += f"\n All-rounder card for any deck"
+    elif card_features[11] < 0.6:
+        prompt += f"\n Card which is good for decks of the same color combination"    
+    elif card_features[11] < 0.8:
+        prompt += f"\n Impactful card you have to build a deck around to be good"    
+    elif card_features[11] <= 1:
+        prompt += f"\n Special card which can win the game if paired with other cards special abilities"
 
     # Generate card text using the GPT-3 model
     response = openai.Completion.create(
@@ -24,9 +71,59 @@ def generate_magic_card_name(card_type, color_identity, mana_value, specializati
     return card_text
 
 
-def generate_magic_card(card_name, card_type, color_identity, mana_value, specialization):
+def generate_magic_card(card_name, card_features):
     # Define a prompt
-    prompt = f"Create the abilities of a new Magic: The Gathering card named {card_name} that has the following attributes:\n\nType: {card_type}\nColor Identity: {color_identity}\nMana Value: {mana_value}\nSpecialization: {specialization}\n\nCard Text:"
+
+    prompt = f"Create the abilities of a new Magic: The Gathering card {card_name} that has the following attributes:\n\nMana costs: "
+
+    # card features is a list of 12 details for writing the card
+    # 0 to 5 are mana colors and amounts. Red,blue,green,white,black,colorless
+    if card_features[0] > 0:     # if there is red mana
+        prompt += f"\n{card_features[0]} Red"
+    if card_features[1] > 0:     # if there is blue mana
+        prompt += f"\n{card_features[1]} Blue"
+    if card_features[2] > 0:     # if there is green mana
+        prompt += f"\n{card_features[2]} Green"
+    if card_features[3] > 0:     # if there is white mana
+        prompt += f"\n{card_features[3]} White"
+    if card_features[4] > 0:     # if there is black mana
+        prompt += f"\n{card_features[4]} Black"
+    if card_features[5] > 0:     # if there is colorless mana
+        prompt += f"\n{card_features[5]} Colorless"
+
+    # check if no mana cost
+    if card_features[0] + card_features[1] + card_features[2] + card_features[3] + card_features[4] + card_features[5] == 0:
+        prompt += f"\n(no mana cost)"
+
+    prompt += f"\n\nCard Types: "
+    # 6 to 10 are card types creature, instant, sorcery, artifact, enchantment
+    if card_features[6] == 1:
+        prompt += f"\n Creature"
+    if card_features[7] == 1:
+        prompt += f"\n Instant"    
+    if card_features[8] == 1:
+        prompt += f"\n Sorcery"    
+    if card_features[9] == 1:
+        prompt += f"\n Artifact"    
+    if card_features[10] == 1:
+        prompt += f"\n Enchantment"
+
+    prompt += f"\n\nPurpose: "
+    # 11 is a special feature to indicate the level of specialization the card should have
+    # 0-0.4 you get a general card 
+    # 0.4-0.6 you get a card good for the color
+    # 0.6-0.8 you get a commander type card
+    # 0.8-1 you get a infinite combo card (hopefully)
+    if card_features[11] < 0.4:
+        prompt += f"\n All-rounder card for any deck"
+    elif card_features[11] < 0.6:
+        prompt += f"\n Card which is good for decks of the same color combination"    
+    elif card_features[11] < 0.8:
+        prompt += f"\n Impactful card you have to build a deck around to be good"    
+    elif card_features[11] <= 1:
+        prompt += f"\n Special card which can win the game if paired with other cards special abilities"
+
+    prompt += f"\n\nCard Text:"
 
     # Generate card text using the GPT-3 model
     response = openai.Completion.create(
@@ -61,6 +158,9 @@ def generate_card_art(card_name):
 
 
 # Exaple usage
-name = generate_magic_card_name("Creature", "Red", "3", "Aggressive")
-generate_magic_card(name, "Creature", "Red", "3", "Aggressive")
+# I want to make a 3 cost blue/colorless spell card meant for an infinite combo
+features = [0,2,0,0,0,1,0,0,1,0,0,1]
+
+name = generate_magic_card_name(features)
+generate_magic_card(name, features)
 generate_card_art(name)
