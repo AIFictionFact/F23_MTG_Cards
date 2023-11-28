@@ -54,6 +54,8 @@ def generate_magic_card_name(card_features):
     elif card_features[11] <= 1:
         prompt += f"\n Special card which is extremely powerful if paired with other abilities"
 
+    prompt += f"\n\nName:"
+
     # Generate card text using the GPT-3 model
     response = openai.Completion.create(
         engine="text-davinci-002",
