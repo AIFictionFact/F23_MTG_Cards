@@ -16,7 +16,7 @@ def store_rating(rating,card_info,filename,draft_num,hist):
     rnn_sample = []
 
     for i in range(zeroes):
-        rnn_sample.append[[0 for element in range(card_info.len() + 1)]]
+        rnn_sample.append([0 for element in range(len(card_info) + 1)])
 
     for card in hist:
         rnn_sample.append(card)
@@ -187,7 +187,7 @@ def main_window():
                     card_detail_list.append(card_details)
                     images.append(card_text)
 
-                hist = draft_window(images,card_details,i,hist)
+                hist = draft_window(images,card_detail_list,i,hist)
             ending_window()
             break
         elif event == "Exit" or event == sg.WIN_CLOSED:
@@ -203,12 +203,20 @@ def generate_random_card_features():
 
     features = []
     # card colors 0 thru 5
-    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # red
-    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # blue
-    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # green
-    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # white
-    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # black
-    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.7, 0.1, 0.1, 0.05, 0.03, 0.02])) # colorless
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])) # red
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])) # blue
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])) # green
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])) # white
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])) # black
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])) # colorless
+
+    while(sum(features) == 0):                                                                         # keep going until a mana is shown
+        features[0] = numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])
+        features[1] = numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])
+        features[2] = numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])
+        features[3] = numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])
+        features[4] = numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])
+        features[5] = numpy.random.choice(numpy.arange(0, 6), p=[0.95, 0.02, 0.015, 0.01, 0.003, 0.002])
 
     # card type
     features.append(numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05])) # 5 percent chance its multitype

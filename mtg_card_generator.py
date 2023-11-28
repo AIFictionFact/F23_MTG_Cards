@@ -1,7 +1,7 @@
 import openai
 
 # Set API key
-openai.api_key = 'instert_key_here'
+openai.api_key = 'insert_key_here'
 
 def generate_magic_card_name(card_features):
     # Define a prompt
@@ -73,8 +73,9 @@ def generate_magic_card_name(card_features):
 
 def generate_magic_card(card_name, card_features):
     # Define a prompt
-    card_details = []
+    card_details = [card_name]
 
+    card_details.append("=========================")
 
     prompt = f'Create the abilities of a new Magic: The Gathering card, "{card_name}" that has the following attributes:\n\nMana costs: '
 
