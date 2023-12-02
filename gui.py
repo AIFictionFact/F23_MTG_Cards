@@ -48,6 +48,10 @@ def store_rating(rating,card_info,filename,draft_num,hist):
     hist.append(card_info)
     return hist
 
+#display window for rating a card
+#displays chosen card with rating buttond 1 through 5
+#once a button is pressed store the rating and card info in a csv then go back to draft window or field card window
+#or go to the end window if the draft or field card addition is completed
 def rating_window(card_image,card_info,filename,draft_num,hist):
     
     #layout = [[sg.Image(card_image),sg.Text("How would you rate this card? [1 = terrible, 5 = perfect]"),],[sg.Button("1",size=(23,1)),sg.Button("2",size=(23,1)),sg.Button("3",size=(23,1)),sg.Button("4",size=(23,1)),sg.Button("5",size=(23,1))]]
@@ -67,6 +71,9 @@ def rating_window(card_image,card_info,filename,draft_num,hist):
     
     return hist
 
+#display window for drafting card 
+#displays 10 cards an buttons to draft each card
+#once a button is clicked transitions to the the rating window
 def draft_window(images,card_details,draft_num,hist):
     # images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
     # images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
@@ -106,7 +113,8 @@ def draft_window(images,card_details,draft_num,hist):
 
     return hist
 
-
+#displays after a draft or field card addtion is completed 
+#gives the user the option to go back to the main window or quit the program
 def ending_window():
     layout = [[sg.Text("Done!")],[sg.Text("Exit?")], [sg.Button("Yes")], [sg.Button("No")]]
 
@@ -124,7 +132,11 @@ def ending_window():
             window.close()
             main_window()
     
-
+#display a single card
+#then give the user the option to display another card
+#or exit to the end window
+#once the player has chosen display the rating window then take them
+#to the window of their choice (field card window or ending window)
 def field_card_window():
     # get info from model
     card_details = generate_random_card_features()
@@ -154,7 +166,7 @@ def field_card_window():
              break
 
 
-
+#give the player the option to either, start a draft, add a field card, or quit the program
 def main_window():
 
     layout = [[sg.Text("Want to get drafting?")], [sg.Button("Start draft")],
