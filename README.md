@@ -86,12 +86,12 @@
 - Lack of drafts will decrease number of datapoints to train the model off of. Depends on how many games the group plays during training phase
 
 ## How to Guide
-\
-#Step 1 \
+
+# Step 1 \
 make sure you have python 3 and have installed the packages listed in "requirements.txt" \
-#Step 2 \
+# Step 2 \
 edit "mtg_card_generator.py" and put your openai api key at the top of the file in place of 'insert_key_here' \
-#Step 3 \
+# Step 3 \
 simply run `python gui.py`
 
 
