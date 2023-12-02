@@ -116,7 +116,7 @@ def draft_window(images,card_details,draft_num,hist):
 #displays after a draft or field card addtion is completed 
 #gives the user the option to go back to the main window or quit the program
 def ending_window():
-    layout = [[sg.Text("Done!")],[sg.Text("Exit?")], [sg.Button("Yes")], [sg.Button("No")]]
+    layout = [[sg.Text("Done!")],[sg.Text("go back?")], [sg.Button("Yes")]]
 
     # Create the window
     window = sg.Window("MTG drafter", layout)
@@ -170,8 +170,7 @@ def field_card_window():
 def main_window():
 
     layout = [[sg.Text("Want to get drafting?")], [sg.Button("Start draft")],
-              [sg.Text("Want to add a card to the field?")], [sg.Button("Add card")],
-               [sg.Text("Want to leave?")], [sg.Button("Exit")]
+              [sg.Text("Want to add a card to the field?")], [sg.Button("Add card")]
               ]
 
     window = sg.Window("MTG drafter", layout)
