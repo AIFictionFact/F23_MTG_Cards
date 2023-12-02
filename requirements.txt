@@ -5,3 +5,5 @@ PIL
 requests
 PySimpleGUI
 PySimpleGUIWeb 
+sklearn
+pickle

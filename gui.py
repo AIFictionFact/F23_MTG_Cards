@@ -6,6 +6,9 @@ from parse_cost import parse_type, parse_cost
 import numpy
 import random
 import textwrap
+import cv2
+import time
+
 # rating is the rating given to the card
 # card_info is the list of features applied to the card
 # hist is a list of cards drafted prior to this draft
@@ -80,8 +83,8 @@ def draft_window(images,card_details,draft_num,hist):
     images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
     images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
 
-    buttons1 = [sg.Button("Draft First Card?",size=(23,1)),sg.Button("Draft Second Card?",size=(23,1)),sg.Button("Draft Third Card?",size=(23,1)),sg.Button("Draft Fourth Card?",size=(23,1)),sg.Button("Draft Fifth Card?",size=(23,1))]
-    buttons2 = [sg.Button("Draft Sixith Card?",size=(23,1)),sg.Button("Draft Seventh Card?",size=(23,1)),sg.Button("Draft Eighth Card?",size=(23,1)),sg.Button("Draft Ninth Card?",size=(23,1)),sg.Button("Draft Tenth Card?",size=(23,1))]
+    buttons1 = [sg.Button("Draft First Card?",size=(36,1)),sg.Button("Draft Second Card?",size=(36,1)),sg.Button("Draft Third Card?",size=(36,1)),sg.Button("Draft Fourth Card?",size=(36,1)),sg.Button("Draft Fifth Card?",size=(36,1))]
+    buttons2 = [sg.Button("Draft Sixith Card?",size=(36,1)),sg.Button("Draft Seventh Card?",size=(36,1)),sg.Button("Draft Eighth Card?",size=(36,1)),sg.Button("Draft Ninth Card?",size=(36,1)),sg.Button("Draft Tenth Card?",size=(36,1))]
     layout = [images1, buttons1,images2,buttons2]
     window = sg.Window("Draft cards", layout)
     while True:
@@ -195,12 +198,20 @@ def main_window():
                     # get cards using the info from the model
                     name = generate_magic_card_name(card_details)
                     card_text = generate_magic_card(name, card_details)
-    
+
+                    if(i == 4):
+                        time.sleep(60)
+
+                    print(name)
                     image_url = generate_card_art(name)
-                    image = generate_card_with_art_and_text(image_url, name, parse_type[card_details], parse_cost[card_details], card_text, output_path=f'card{j}.png')
+                    image = generate_card_with_art_and_text(image_url, name, parse_type(card_details), parse_cost(card_details), card_text, output_path=f'card{j}.png')
+
+                    im = cv2.imread(f'card{j}.png')
+                    im = cv2.resize(im,[300,420])
+                    cv2.imwrite(f'card{j}.png',im)
 
                     card_detail_list.append(card_details)
-                    images.append(image)
+                    images.append(f'card{j}.png')
 
                 hist = draft_window(images,card_detail_list,i,hist)
             ending_window()
@@ -260,7 +271,9 @@ def generate_random_card_features():
 # generates a feature space based on rnn
 def generate_card_features_rnn(draft_num,hist):
     from keras.models import load_model
+    from sklearn.preprocessing import OneHotEncoder
     import numpy as np
+    import pickle
     
     # number of zero values to pad the data
     zeroes = 9 - draft_num
@@ -268,19 +281,34 @@ def generate_card_features_rnn(draft_num,hist):
     rnn_sample = []
 
     for i in range(zeroes):
-        rnn_sample.append([0 for element in range(12)])
+        rnn_sample.append([0 for element in range(13)])
 
     for card in hist:
         rnn_sample.append(card)
 
+    rnn_sample = np.array(rnn_sample)
+    rnn_sample = rnn_sample[:,:12]
+
+    # set feature 12 as uniques
+    rnn_sample[:,11] = np.where(rnn_sample[:,11] < 0.4, 2, rnn_sample[:,11])
+    rnn_sample[:,11] = np.where(rnn_sample[:,11] < 0.6, 3, rnn_sample[:,11])
+    rnn_sample[:,11] = np.where(rnn_sample[:,11] < 0.8, 4, rnn_sample[:,11])
+    rnn_sample[:,11] = np.where(rnn_sample[:,11] <= 1, 5, rnn_sample[:,11])
+    
+    with open('scaler.pkl', 'rb') as f:
+        encoder = pickle.load(f)
+
+    rnn_sample = encoder.transform(rnn_sample).toarray()
+
+    rnn_sample = rnn_sample.reshape(1, 9, 50)
 
     model_names = ['red.h5','blue.h5','green.h5','white.h5','black.h5','colorless.h5','creature.h5','instant.h5','sorcery.h5','artifact.h5','enchantment.h5','specialization.h5']
 
     distributions = []
     for name in model_names:
         model = load_model(name)
-        p = np.array(rnn_sample)
-        p = model.predict(p)
+        p = model.predict(rnn_sample)
+        p = np.squeeze(p)
         p = p / np.sum(p)
         distributions.append(p)
 
@@ -316,7 +344,7 @@ def generate_card_features_rnn(draft_num,hist):
         features[10] = numpy.random.choice(numpy.arange(0, 2), p=distributions[10])
     
     # specialization 
-    features[11] = numpy.random.choice(numpy.arange(0, 4), p=distributions[11])
+    features.append(numpy.random.choice(numpy.arange(0, 4), p=distributions[11]))
     features[11] = features[11] / 4
 
     return features

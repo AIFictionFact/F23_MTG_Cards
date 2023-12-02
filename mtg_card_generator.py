@@ -1,7 +1,7 @@
 import openai
 
 # Set API key
-openai.api_key = 'insert_key_here'
+openai.api_key = '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'
 
 def generate_magic_card_name(card_features):
     # Define a prompt
@@ -75,9 +75,6 @@ def generate_magic_card_name(card_features):
 
 def generate_magic_card(card_name, card_features):
     # Define a prompt
-    card_details = [card_name]
-
-    card_details.append("=========================")
 
     prompt = f'Create the abilities of a new Magic: The Gathering card, "{card_name}" that has the following attributes:\n\nMana costs: '
 
@@ -105,9 +102,6 @@ def generate_magic_card(card_name, card_features):
 
     prompt += mana_info
     mana_info += "\n"
-    card_details.append(mana_info.replace('\n', '|'))
-    
-    card_details.append("=========================")
 
     prompt += f"\n\nCard Types: "
     # 6 to 10 are card types creature, instant, sorcery, artifact, enchantment
@@ -125,9 +119,6 @@ def generate_magic_card(card_name, card_features):
         type_info += f"\n Enchantment"
 
     prompt += type_info
-    card_details.append(type_info.replace('\n', ''))
-    
-    card_details.append("=========================")
 
     prompt += f"\n\nPurpose: "
     # 11 is a special feature to indicate the level of specialization the card should have
@@ -157,13 +148,8 @@ def generate_magic_card(card_name, card_features):
 
     # Extract card text
     card_text = response.choices[0].text.strip()
-    card_details.append(card_text.replace('\n', ''))
 
-    
-
-    # Print
-    # print(card_details)
-    return(" ".join(card_details))
+    return(card_text)
 
 
 def generate_card_art(card_name):

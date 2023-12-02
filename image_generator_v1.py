@@ -31,13 +31,13 @@ def generate_card_with_art_and_text(image_url, card_name, card_type, card_cost, 
 
 
     # Set font parameters
-    font_path = "path\\MAGIC.TTF"  # Replace with the path to a TTF font file
+    font_path = "MAGIC.TTF"  # Replace with the path to a TTF font file
     font_size = 50
     font2_size = 60
     font = ImageFont.truetype(font_path, font_size)
     font2 = ImageFont.truetype(font_path, font2_size)
 
-    body_path = "path\\Mplantin.ttf"  # Replace with the path to a TTF font file
+    body_path = "Mplantin.ttf"  # Replace with the path to a TTF font file
     body_size = 40
     body_font = ImageFont.truetype(body_path, body_size)
 
@@ -68,6 +68,7 @@ def generate_card_with_art_and_text(image_url, card_name, card_type, card_cost, 
 
     print(f"Combined image saved at: {output_path}")
 
+"""
 # Example usage:
 card_name = "Flametongue Kavu"
 card_type = "Creature"
@@ -76,3 +77,4 @@ card_text = "Flametongue Kavu deals 4 damage to target creature.\n\nWhen Flameto
 card_cost = "<["
 
 generate_card_with_art_and_text(image_url, card_name, card_type, card_cost, card_text)
+"""
