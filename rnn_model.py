@@ -2,50 +2,66 @@ import numpy as np
 from tensorflow import keras
 
 from keras.models import Sequential
-from keras.layers import Dense, LSTM
+from keras.layers import Dense, LSTM, SimpleRNN, Dropout
 from keras.preprocessing.sequence import TimeseriesGenerator
+from sklearn.preprocessing import OneHotEncoder
 
 # read data
-data = np.loadtxt("ratings.csv",
+data = np.loadtxt("testing.csv",
                  delimiter=",")
+
+print(data.shape)
 
 # sample number = total / time steps (10)
 sample_num = len(data)//10
 
-# reshape into input space (feature = 13 since +1 for y value)
-data = data.reshape(sample_num, 10, 13)
+print(sample_num)
+
+# reshape into 2d space
+data = data.reshape(len(data), 12)
+
+# set feature 12 as uniques
+data[:,11] = np.where(data[:,11] < 0.4, 2, data[:,11])
+data[:,11] = np.where(data[:,11] < 0.6, 3, data[:,11])
+data[:,11] = np.where(data[:,11] < 0.8, 4, data[:,11])
+data[:,11] = np.where(data[:,11] <= 1, 5, data[:,11])
+
+# encode data
+encoder = OneHotEncoder(categories='auto')
+data = encoder.fit_transform(data).toarray()
+
+print(data.shape)
+
+# reshape into input space
+data = data.reshape(sample_num, 10, 50)
+
+print(data.shape)
 
 # divide data into train and test
-train_ind = int(sample_num*0.8)
-train = data[:train_ind,:,:12]
-test = data[train_ind:,:,:12]
+val_ind = int(sample_num*0.95)
+train = data[:val_ind,:,:]
+val = data[val_ind:,:,:]
 
 X_train = train[:,:9,:]
-y_train = train[:,9:,:]
+y_train = np.squeeze(train[:,9:,:6])
 
-X_test = test[:,:9,:]
-y_test = test[:,9:,:]
+X_val = val[:,:9,:]
+y_val = np.squeeze(val[:,9:,:6])
+
+print(X_train.shape)
+print(y_train.shape)
 
 # Create model
 rnnModel = Sequential() 
-rnnModel.add(LSTM(128, input_shape=(9,12))) # timespan of 10, function space of 12
-rnnModel.add(Dense(12)) # output is feature space for predicted value
+rnnModel.add(SimpleRNN(128, input_shape=(9,50), return_sequences=False)) # timespan of 10, function space of 12
+rnnModel.add(Dense(6, activation='sigmoid')) # output is feature space for predicted value
 rnnModel.build()
 rnnModel.summary()
 
-rnnModel.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
+rnnModel.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 
 # fit model
-rnnModel.fit(X_train, y_train, epochs=10, batch_size=32)
+rnnModel.fit(X_train, y_train, validation_data=(X_val,y_val), epochs=50, batch_size=128)
 
 # save model
-rnnModel.save("rnnModel.h5")
-
-# get accuracy
-y_pred = rnnModel.predict(X_test)
-
-print(y_pred)
-
-mse = np.mean((y_pred - y_test)**2)
-
-print(mse)
+rnnModel.save("blue.h5")

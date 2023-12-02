@@ -71,8 +71,8 @@ def draft_window(images,card_details,draft_num,hist):
     # images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
     # images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
     
-    images1 = [sg.Text(images[0],size=(25, None)),sg.Text(images[1],size=(25, None)),sg.Text(images[2],size=(25, None)),sg.Text(images[3],size=(25, None)),sg.Text(images[4],size=(25, None))]
-    images2 = [sg.Text(images[5],size=(25, None)),sg.Text(images[6],size=(25, None)),sg.Text(images[7],size=(25, None)),sg.Text(images[8],size=(25, None)),sg.Text(images[9],size=(25, None))]
+    images1 = [sg.Text(images[0],size=(23, None)),sg.Text(images[1],size=(23, None)),sg.Text(images[2],size=(23, None)),sg.Text(images[3],size=(23, None)),sg.Text(images[4],size=(23, None))]
+    images2 = [sg.Text(images[5],size=(23, None)),sg.Text(images[6],size=(23, None)),sg.Text(images[7],size=(23, None)),sg.Text(images[8],size=(23, None)),sg.Text(images[9],size=(23, None))]
     buttons1 = [sg.Button("Draft First Card?",size=(23,1)),sg.Button("Draft Second Card?",size=(23,1)),sg.Button("Draft Third Card?",size=(23,1)),sg.Button("Draft Fourth Card?",size=(23,1)),sg.Button("Draft Fifth Card?",size=(23,1))]
     buttons2 = [sg.Button("Draft Sixith Card?",size=(23,1)),sg.Button("Draft Seventh Card?",size=(23,1)),sg.Button("Draft Eighth Card?",size=(23,1)),sg.Button("Draft Ninth Card?",size=(23,1)),sg.Button("Draft Tenth Card?",size=(23,1))]
     layout = [images1, buttons1,images2,buttons2]
@@ -176,7 +176,10 @@ def main_window():
                 card_detail_list = []
                 for j in range(10): # MAKE 10 CARDS
                     # get info from model
-                    card_details = generate_random_card_features()
+                    if(i > 0):
+                        card_details = generate_card_features_rnn(i,hist)
+                    else:
+                        card_details = generate_random_card_features()
                     # get cards using the info from the model
                     name = generate_magic_card_name(card_details)
                     card_text = generate_magic_card(name, card_details)
@@ -242,6 +245,42 @@ def generate_random_card_features():
     
     return features
         
+# generates a feature space based on rnn
+def generate_card_features_rnn(draft_num,hist):
+    from keras.models import load_model
+    import numpy as np
+    
+    # number of zero values to pad the data
+    zeroes = 9 - draft_num
+
+    rnn_sample = []
+
+    for i in range(zeroes):
+        rnn_sample.append([0 for element in range(13)])
+
+    for card in hist:
+        rnn_sample.append(card)
+
+    model = load_model('rnnModel.h5')
+
+    rnn_sample = np.array(rnn_sample)
+    rnn_sample = rnn_sample.reshape(1, 9, 13)
+    rnn_sample = rnn_sample[:,:,:12]
+
+    y_pred = model.predict(rnn_sample)
+    y_pred += (np.random.rand(1,12)/4)
+    y_pred[:,:11] = np.rint(y_pred[:,:11])
+
+    y_pred = y_pred.ravel()
+
+    y_pred = y_pred.tolist()
+
+    print(y_pred)
+
+    return [int(i) for i in y_pred]
+
+
+
 main_window()
 
 
