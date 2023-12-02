@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 import csv  
-from mtg_card_generator import generate_magic_card_name, generate_magic_card
+from mtg_card_generator import generate_magic_card_name, generate_magic_card, generate_card_art
+from image_generator_v1 import generate_card_with_art_and_text
+from parse_cost import parse_type, parse_cost
 import numpy
 import random
 import textwrap
@@ -75,11 +77,9 @@ def rating_window(card_image,card_info,filename,draft_num,hist):
 #displays 10 cards an buttons to draft each card
 #once a button is clicked transitions to the the rating window
 def draft_window(images,card_details,draft_num,hist):
-    # images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
-    # images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
-    
-    images1 = [sg.Text(images[0],size=(23, None)),sg.Text(images[1],size=(23, None)),sg.Text(images[2],size=(23, None)),sg.Text(images[3],size=(23, None)),sg.Text(images[4],size=(23, None))]
-    images2 = [sg.Text(images[5],size=(23, None)),sg.Text(images[6],size=(23, None)),sg.Text(images[7],size=(23, None)),sg.Text(images[8],size=(23, None)),sg.Text(images[9],size=(23, None))]
+    images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
+    images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
+
     buttons1 = [sg.Button("Draft First Card?",size=(23,1)),sg.Button("Draft Second Card?",size=(23,1)),sg.Button("Draft Third Card?",size=(23,1)),sg.Button("Draft Fourth Card?",size=(23,1)),sg.Button("Draft Fifth Card?",size=(23,1))]
     buttons2 = [sg.Button("Draft Sixith Card?",size=(23,1)),sg.Button("Draft Seventh Card?",size=(23,1)),sg.Button("Draft Eighth Card?",size=(23,1)),sg.Button("Draft Ninth Card?",size=(23,1)),sg.Button("Draft Tenth Card?",size=(23,1))]
     layout = [images1, buttons1,images2,buttons2]
@@ -144,9 +144,9 @@ def field_card_window():
     name = generate_magic_card_name(card_details)
     card_text = generate_magic_card(name, card_details)
     
-    # turn card text into image!!!!
+    image_url = generate_card_art(name)
+    image = generate_card_with_art_and_text(image_url, name, parse_type[card_details], parse_cost[card_details], card_text, output_path='card.png')
 
-    image = 'card.png'
     filename = "field_card.csv"
     #layout = [ [sg.Image(image)], [sg.Button("Next Card")],[sg.Button("Finish")]]
     layout = [ [sg.Text(image,size=(25, None))], [sg.Button("Next Card")],[sg.Button("Finish")]]
@@ -195,12 +195,12 @@ def main_window():
                     # get cards using the info from the model
                     name = generate_magic_card_name(card_details)
                     card_text = generate_magic_card(name, card_details)
-
-                    # card_text EXAMPLE: ["\n3 Red\n2 Colorless", "\n Creature", "\nMana Wurm\nWhenever you cast a spell, put a +1/+1 counter on Mana Wurm."]
-                    # turn card_text into text!!!! <-------------------------------
+    
+                    image_url = generate_card_art(name)
+                    image = generate_card_with_art_and_text(image_url, name, parse_type[card_details], parse_cost[card_details], card_text, output_path=f'card{j}.png')
 
                     card_detail_list.append(card_details)
-                    images.append(card_text)
+                    images.append(image)
 
                 hist = draft_window(images,card_detail_list,i,hist)
             ending_window()
@@ -268,28 +268,58 @@ def generate_card_features_rnn(draft_num,hist):
     rnn_sample = []
 
     for i in range(zeroes):
-        rnn_sample.append([0 for element in range(13)])
+        rnn_sample.append([0 for element in range(12)])
 
     for card in hist:
         rnn_sample.append(card)
 
-    model = load_model('rnnModel.h5')
 
-    rnn_sample = np.array(rnn_sample)
-    rnn_sample = rnn_sample.reshape(1, 9, 13)
-    rnn_sample = rnn_sample[:,:,:12]
+    model_names = ['red.h5','blue.h5','green.h5','white.h5','black.h5','colorless.h5','creature.h5','instant.h5','sorcery.h5','artifact.h5','enchantment.h5','specialization.h5']
 
-    y_pred = model.predict(rnn_sample)
-    y_pred += (np.random.rand(1,12)/4)
-    y_pred[:,:11] = np.rint(y_pred[:,:11])
+    distributions = []
+    for name in model_names:
+        model = load_model(name)
+        p = np.array(rnn_sample)
+        p = model.predict(p)
+        p = p / np.sum(p)
+        distributions.append(p)
 
-    y_pred = y_pred.ravel()
+    features = []
+    # card colors 0 thru 5
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=distributions[0])) # red
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=distributions[1])) # blue
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=distributions[2])) # green
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=distributions[3])) # white
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=distributions[4])) # black
+    features.append(numpy.random.choice(numpy.arange(0, 6), p=distributions[5])) # colorless
 
-    y_pred = y_pred.tolist()
+    while(sum(features) == 0):                                                                         # keep going until a mana is shown
+        features[0] = numpy.random.choice(numpy.arange(0, 6), p=distributions[0])
+        features[1] = numpy.random.choice(numpy.arange(0, 6), p=distributions[1])
+        features[2] = numpy.random.choice(numpy.arange(0, 6), p=distributions[2])
+        features[3] = numpy.random.choice(numpy.arange(0, 6), p=distributions[3])
+        features[4] = numpy.random.choice(numpy.arange(0, 6), p=distributions[4])
+        features[5] = numpy.random.choice(numpy.arange(0, 6), p=distributions[5])
 
-    print(y_pred)
+    # card type
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=distributions[6]))
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=distributions[7]))
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=distributions[8]))
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=distributions[9])) 
+    features.append(numpy.random.choice(numpy.arange(0, 2), p=distributions[10])) 
 
-    return [int(i) for i in y_pred]
+    while(sum(features[6:]) == 0):                                                                         # keep going until a type is shown
+        features[6] = numpy.random.choice(numpy.arange(0, 2), p=distributions[6])
+        features[7] = numpy.random.choice(numpy.arange(0, 2), p=distributions[7])
+        features[8] = numpy.random.choice(numpy.arange(0, 2), p=distributions[8])
+        features[9] = numpy.random.choice(numpy.arange(0, 2), p=distributions[9])
+        features[10] = numpy.random.choice(numpy.arange(0, 2), p=distributions[10])
+    
+    # specialization 
+    features[11] = numpy.random.choice(numpy.arange(0, 4), p=distributions[11])
+    features[11] = features[11] / 4
+
+    return features
 
 
 

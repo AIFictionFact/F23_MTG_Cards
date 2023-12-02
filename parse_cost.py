@@ -24,6 +24,23 @@ def parse_cost(values):
     
     return result_string
 
+def parse_type(values):
+    result_string = ""
+
+    if values[6] == 1:
+        result_string += "Creature "
+    if values[7] == 1:
+        result_string += "Instant "
+    if values[8] == 1:
+        result_string += "Sorcery "
+    if values[9] == 1:
+        result_string += "Artifact "
+    if values[10] == 1:
+        result_string += "Enchantment "
+
+    return result_string
+
+
 # Example usage:
 numbers = [1, 1, 1, 1, 1, 2]
 result = parse_cost(numbers)
