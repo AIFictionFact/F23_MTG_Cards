@@ -1,0 +1,7 @@
+numpy 
+tensorflow 
+openai
+PIL 
+requests
+PySimpleGUI
+PySimpleGUIWeb 
