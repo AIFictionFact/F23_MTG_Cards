@@ -31,13 +31,13 @@ def generate_card_with_art_and_text(image_url, card_name, card_type, card_cost, 
 
 
     # Set font parameters
-    font_path = "c:\\Users\\exrod\Pictures\\school\\rpi\\ai\\project\\magicthegathering\\MAGIC.TTF"  # Replace with the path to a TTF font file
+    font_path = "path\\MAGIC.TTF"  # Replace with the path to a TTF font file
     font_size = 50
     font2_size = 60
     font = ImageFont.truetype(font_path, font_size)
     font2 = ImageFont.truetype(font_path, font2_size)
 
-    body_path = "c:\\Users\\exrod\Pictures\\school\\rpi\\ai\\project\\magicthegathering\\Mplantin.ttf"  # Replace with the path to a TTF font file
+    body_path = "path\\Mplantin.ttf"  # Replace with the path to a TTF font file
     body_size = 40
     body_font = ImageFont.truetype(body_path, body_size)
 
