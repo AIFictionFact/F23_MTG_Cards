@@ -83,4 +83,15 @@
 ## Limit on feature space 
 - MTG cards can have numerous and complex abilities that would be difficult to describe in our model so we will likely have to leave out the cards’ abilities from the features we consider
 ## Limit on drafts made
-- Lack of drafts will decrease number of datapoints to train the model off of. Depends on how many games the group plays during training phase 
+- Lack of drafts will decrease number of datapoints to train the model off of. Depends on how many games the group plays during training phase
+
+## How to Guide
+
+### Step 1 
+make sure you have python 3 and have installed the packages listed in "requirements.txt" 
+### Step 2 
+edit "mtg_card_generator.py" and put your openai api key at the top of the file in place of 'insert_key_here' 
+### Step 3 
+simply run `python gui.py`
+
+

@@ -169,7 +169,7 @@ def generate_magic_card(card_name, card_features):
 def generate_card_art(card_name):
 
     # Construct a prompt for DALL·E
-    desc = f"Create art for a Magic: The Gathering card named '{card_name}'."
+    desc = f"Create a detailed epic fantasy oil painting to act as art for a Magic: The Gathering card named '{card_name}'."
 
     response = openai.Image.create(
         model="dall-e-2",
@@ -179,8 +179,17 @@ def generate_card_art(card_name):
     )
     image_url = response.data[0].url
 
-    print(f"Card Art for '{card_name}': {image_url}")
+    return image_url
 
+
+inappropriate_words = ["white power", "white knight", "arse", "bitch", "bullshit", "piss", "bellend", "shit" "bollocks", "fuck", "prick", "bastard", "cock"]
+# search a card's name and description for inappropriate words and phrases.
+def contains_inappropriate_words(text):
+    text_lower = text.lower()
+    for word in inappropriate_words:
+        if word in text_lower:
+            return True
+    return False
 
 # Exaple usage
 # I want to make a 3 cost blue/colorless spell card meant for an infinite combo
@@ -189,5 +198,5 @@ features = [0,2,0,0,0,1,0,0,1,0,0,1]
 
 name = generate_magic_card_name(features)
 card_details = generate_magic_card(name, features)
-generate_card_art(name)
+card_art = generate_card_art(name)
 '''
