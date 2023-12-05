@@ -83,8 +83,8 @@ def draft_window(images,card_details,draft_num,hist):
     images1 = [sg.Image(images[0]),sg.Image(images[1]),sg.Image(images[2]),sg.Image(images[3]),sg.Image(images[4])]
     images2 = [sg.Image(images[5]),sg.Image(images[6]),sg.Image(images[7]),sg.Image(images[8]),sg.Image(images[9])]
 
-    buttons1 = [sg.Button("Draft First Card?",size=(36,1)),sg.Button("Draft Second Card?",size=(36,1)),sg.Button("Draft Third Card?",size=(36,1)),sg.Button("Draft Fourth Card?",size=(36,1)),sg.Button("Draft Fifth Card?",size=(36,1))]
-    buttons2 = [sg.Button("Draft Sixith Card?",size=(36,1)),sg.Button("Draft Seventh Card?",size=(36,1)),sg.Button("Draft Eighth Card?",size=(36,1)),sg.Button("Draft Ninth Card?",size=(36,1)),sg.Button("Draft Tenth Card?",size=(36,1))]
+    buttons1 = [sg.Button("Draft First Card?",size=(30,1)),sg.Button("Draft Second Card?",size=(30,1)),sg.Button("Draft Third Card?",size=(30,1)),sg.Button("Draft Fourth Card?",size=(30,1)),sg.Button("Draft Fifth Card?",size=(30,1))]
+    buttons2 = [sg.Button("Draft Sixith Card?",size=(30,1)),sg.Button("Draft Seventh Card?",size=(30,1)),sg.Button("Draft Eighth Card?",size=(30,1)),sg.Button("Draft Ninth Card?",size=(30,1)),sg.Button("Draft Tenth Card?",size=(30,1))]
     layout = [images1, buttons1,images2,buttons2]
     window = sg.Window("Draft cards", layout)
     while True:
@@ -207,11 +207,11 @@ def main_window():
                     image = generate_card_with_art_and_text(image_url, name, parse_type(card_details), parse_cost(card_details), card_text, output_path=f'card{j}.png')
 
                     im = cv2.imread(f'card{j}.png')
-                    im = cv2.resize(im,[300,420])
-                    cv2.imwrite(f'card{j}.png',im)
+                    im = cv2.resize(im,[250,350])
+                    cv2.imwrite(f'adj_card{j}.png',im)
 
                     card_detail_list.append(card_details)
-                    images.append(f'card{j}.png')
+                    images.append(f'adj_card{j}.png')
 
                 hist = draft_window(images,card_detail_list,i,hist)
             ending_window()

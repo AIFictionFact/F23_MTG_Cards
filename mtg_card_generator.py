@@ -1,7 +1,7 @@
 import openai
 
 # Set API key
-openai.api_key = 'insert_key_here'
+openai.api_key = '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'
 
 def generate_magic_card_name(card_features):
     # Define a prompt
@@ -168,7 +168,7 @@ def generate_card_art(card_name):
     return image_url
 
 
-inappropriate_words = ["white power", "white knight", "arse", "bitch", "bullshit", "piss", "bellend", "shit" "bollocks", "fuck", "prick", "bastard", "cock"]
+inappropriate_words = ["White Power", "White Knight", "arse", "bitch", "bullshit", "piss", "bellend", "shit" "bollocks", "fuck", "prick", "bastard", "cock", "Black Sun's Zenith"]
 # search a card's name and description for inappropriate words and phrases.
 def contains_inappropriate_words(text):
     text_lower = text.lower()
