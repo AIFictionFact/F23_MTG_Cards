@@ -1,7 +1,7 @@
 import openai
 
 # Set API key
-openai.api_key = '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'
+openai.api_key = 'put openai API key here'
 
 def generate_magic_card_name(card_features):
     # Define a prompt
